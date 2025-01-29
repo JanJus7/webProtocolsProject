@@ -1,0 +1,82 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# ==========================
+# 🔹 Dependencies
+# ==========================
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ==========================
+# 🔹 Testing & Coverage
+# ==========================
+/coverage
+
+# ==========================
+# 🔹 Next.js
+# ==========================
+/.next/
+/.next/cache
+/out/
+
+# ==========================
+# 🔹 Production Builds
+# ==========================
+/build
+
+# ==========================
+# 🔹 Miscellaneous
+# ==========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.pem
+*.swp
+*.swo
+
+# ==========================
+# 🔹 Debugging Logs
+# ==========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==========================
+# 🔹 Environment Variables
+# ==========================
+.env*
+.env.local
+
+# ==========================
+# 🔹 Vercel
+# ==========================
+.vercel
+
+# ==========================
+# 🔹 TypeScript
+# ==========================
+*.tsbuildinfo
+next-env.d.ts
+
+# ==========================
+# 🔹 IDE / Editor Config Files
+# ==========================
+.vscode/
+.idea/
+*.history
+*.local
+
+# ==========================
+# 🔹 User-specific Files
+# ==========================
+.npm
+.nvmrc
