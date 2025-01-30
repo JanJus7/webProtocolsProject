@@ -3,14 +3,14 @@ import { ObjectId } from 'mongodb';
 
 const COLLECTION_NAME = 'games-history';
 
-async function getCollection() {
+export async function getCollection() {
   const client = await clientPromise;
   const db = client.db();
   return db.collection(COLLECTION_NAME);
 }
 
 
-export async function createGame() {
+export async function createGame(userId) {
   const collection = await getCollection();
   const initialBoard = Array(15).fill().map(() => Array(15).fill(null));
   const game = {
@@ -18,6 +18,7 @@ export async function createGame() {
     currentPlayer: 'black',
     winner: null,
     createdAt: new Date(),
+    userId
   };
   const result = await collection.insertOne(game);
   return result.insertedId;

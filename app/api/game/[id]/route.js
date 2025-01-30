@@ -2,7 +2,7 @@ import { getGame, updateGame } from '@/models/Game';
 import { NextResponse } from 'next/server';
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
   const game = await getGame(id);
   if (game) {
     return NextResponse.json(game);

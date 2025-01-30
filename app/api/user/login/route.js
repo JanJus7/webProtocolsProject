@@ -7,7 +7,7 @@ export async function POST(request) {
   try {
     const user = await findUserByUsername(username);
     if (user && await bcrypt.compare(password, user.password)) {
-      return NextResponse.json({ message: 'Login successful' }, { status: 200 });
+      return NextResponse.json({ message: 'Login successful', userId: user._id.toString() }, { status: 200 });
     } else {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }

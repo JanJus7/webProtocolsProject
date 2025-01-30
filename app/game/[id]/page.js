@@ -1,30 +1,40 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, use } from 'react';
 import axios from 'axios';
 import { checkWinner } from '@/lib/gameLogic';
+import { useRouter } from 'next/navigation';
 
-function Game() {
-  const [gameId, setGameId] = useState(null);
+export default function Game({ params }) {
+  const { id } = use(params);
   const [board, setBoard] = useState(Array(15).fill().map(() => Array(15).fill(null)));
   const [currentPlayer, setCurrentPlayer] = useState('black');
   const [winner, setWinner] = useState(null);
-  const isGameCreated = useRef(false);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const createNewGame = async () => {
-      if (isGameCreated.current) return;
-      isGameCreated.current = true;
-
+    const fetchGame = async () => {
       try {
-        const response = await axios.post('/api/game');
-        setGameId(response.data.gameId);
+        const response = await axios.get(`/api/game/${id}`);
+        const game = response.data;
+
+        if (game) {
+          setBoard(game.board);
+          setCurrentPlayer(game.currentPlayer);
+          setWinner(game.winner);
+        } else {
+          router.push('/menu');
+        }
       } catch (error) {
-        console.error('Failed to create a new game:', error);
+        console.error('Failed to fetch game:', error);
+        router.push('/menu');
+      } finally {
+        setLoading(false);
       }
     };
 
-    createNewGame();
-  }, []);
+    fetchGame();
+  }, [id, router]);
 
   const handleCellClick = async (x, y) => {
     if (board[x][y] || winner) return;
@@ -35,13 +45,17 @@ function Game() {
 
     if (checkWinner(newBoard, x, y, currentPlayer)) {
       setWinner(currentPlayer);
-      await axios.put(`/api/game/${gameId}`, { board: newBoard, currentPlayer, winner: currentPlayer });
+      await axios.put(`/api/game/${id}`, { board: newBoard, currentPlayer, winner: currentPlayer });
     } else {
       const nextPlayer = currentPlayer === 'black' ? 'white' : 'black';
       setCurrentPlayer(nextPlayer);
-      await axios.put(`/api/game/${gameId}`, { board: newBoard, currentPlayer: nextPlayer });
+      await axios.put(`/api/game/${id}`, { board: newBoard, currentPlayer: nextPlayer });
     }
   };
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen bg-gray-100">Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -63,5 +77,3 @@ function Game() {
     </div>
   );
 }
-
-export default Game;

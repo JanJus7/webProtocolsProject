@@ -11,6 +11,12 @@ async function getCollection() {
 
 export async function createUser(username, password) {
   const collection = await getCollection();
+
+  const existingUser = await collection.findOne({ username });
+  if (existingUser) {
+    throw new Error('User already exists');
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = {
     username,
@@ -19,7 +25,7 @@ export async function createUser(username, password) {
     createdAt: new Date(),
   };
   const result = await collection.insertOne(user);
-  return result.insertedId;
+  return result.insertedId.toString();
 }
 
 export async function findUserByUsername(username) {

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 function Home() {
   const [username, setUsername] = useState('');
@@ -19,7 +20,12 @@ function Home() {
     try {
       const response = await axios.post(endpoint, { username, password });
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
+        if (isLogin) {
+          Cookies.set('userId', response.data.userId);
+        } else {
+          Cookies.set('userId', response.data.userId);
+        }
         router.push('/menu');
       } else {
         setError(response.data.error || (isLogin ? 'Login failed' : 'Registration failed'));
