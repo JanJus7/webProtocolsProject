@@ -1,55 +1,80 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import axios from 'axios';
-import { checkWinner } from '@/lib/gameLogic';
+import { useRouter } from 'next/navigation';
 
 function Home() {
-  const [gameId, setGameId] = useState(null);
-  const [board, setBoard] = useState(Array(15).fill().map(() => Array(15).fill(null)));
-  const [currentPlayer, setCurrentPlayer] = useState('black');
-  const [winner, setWinner] = useState(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const router = useRouter();
 
-  useEffect(() => {
-    const createNewGame = async () => {
-      const response = await axios.post('/api/game');
-      setGameId(response.data.gameId);
-    };
-    createNewGame();
-  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
 
-  const handleCellClick = async (x, y) => {
-    if (board[x][y] || winner) return;
+    const endpoint = isLogin ? '/api/user/login' : '/api/user/register';
+    try {
+      const response = await axios.post(endpoint, { username, password });
 
-    const newBoard = board.map(row => [...row]);
-    newBoard[x][y] = currentPlayer;
-    setBoard(newBoard);
-
-    if (checkWinner(newBoard, x, y, currentPlayer)) {
-      setWinner(currentPlayer);
-      await axios.put(`/api/game/${gameId}`, { board: newBoard, currentPlayer, winner: currentPlayer });
-    } else {
-      const nextPlayer = currentPlayer === 'black' ? 'white' : 'black';
-      setCurrentPlayer(nextPlayer);
-      await axios.put(`/api/game/${gameId}`, { board: newBoard, currentPlayer: nextPlayer });
+      if (response.status === 200) {
+        router.push('/menu');
+      } else {
+        setError(response.data.error || (isLogin ? 'Login failed' : 'Registration failed'));
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'An error occurred');
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl text-blue-400 font-bold mb-4">Gomoku</h1>
-      {winner && <p className="text-xl text-blue-400 mb-4">Winner: {winner}</p>}
-      <div className="board">
-        {board.map((row, x) =>
-          row.map((cell, y) => (
-            <div
-              key={`${x}-${y}`}
-              className="w-8 h-8 border border-gray-300 flex bg-gray-400 hover:bg-gray-600 items-center justify-center cursor-pointer"
-              onClick={() => handleCellClick(x, y)}
-            >
-              {cell === 'black' ? '⚫' : cell === 'white' ? '⚪' : ''}
-            </div>
-          ))
-        )}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-80">
+        <h2 className="text-2xl font-bold text-black mb-6 text-center">{isLogin ? 'Login' : 'Register'}</h2>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm text-black font-medium mb-2" htmlFor="username">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-3 text-black py-2 border border-black rounded-lg"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-sm text-black font-medium mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 text-black py-2 border border-black rounded-lg"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 mb-4"
+          >
+            {isLogin ? 'Login' : 'Register'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsLogin(!isLogin)}
+            className="w-full text-blue-500 hover:text-blue-600"
+          >
+            {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
+          </button>
+        </form>
       </div>
     </div>
   );
