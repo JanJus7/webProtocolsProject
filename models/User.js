@@ -1,5 +1,6 @@
 import clientPromise from '@/lib/db';
 import bcrypt from 'bcrypt';
+import { ObjectId } from 'mongodb';
 
 const COLLECTION_NAME = 'users';
 
@@ -31,4 +32,9 @@ export async function createUser(username, password) {
 export async function findUserByUsername(username) {
   const collection = await getCollection();
   return collection.findOne({ username });
+}
+
+export async function findUserByUserId(userId) {
+  const collection = await getCollection();
+  return collection.findOne({ _id: new ObjectId(userId) });
 }
