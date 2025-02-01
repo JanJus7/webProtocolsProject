@@ -13,6 +13,11 @@ export default function Menu() {
   const [createdAt, setCreatedAt] = useState(null);
   const userId = Cookies.get("userId");
 
+  const handleLogout = () => {
+    Cookies.remove("userId");
+    router.push("/");
+  };
+
   useEffect(() => {
     if (userId) {
       const getUser = async () => {
@@ -76,8 +81,9 @@ export default function Menu() {
           icon={faFaceSmile}
           className=" text-blue-500 p-2"
         />
-        <p className="text-gray-700 pt-8">Username: {username}</p>
+        <p className="text-gray-700 mt-8">Username: {username}</p>
         <p className="text-gray-700">Account created: {formattedDate}</p>
+        <button onClick={handleLogout} className="bg-red-500 text-white rounded-lg hover:bg-red-600 mt-8 px-4 py-3">Logout...</button>
       </div>
     </div>
   );
