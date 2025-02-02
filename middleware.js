@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
@@ -7,9 +8,11 @@ export async function middleware(request) {
     pathname.startsWith(route)
   );
 
+  const cookieStore = await cookies();
+  const userId = await cookieStore.get("userId")?.value;
   const isGuestSession = pathname === "/game/guest-session";
 
-  if (isProtectedRoute && !isGuestSession) {
+  if (isProtectedRoute && !userId && !isGuestSession) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
