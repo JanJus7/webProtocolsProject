@@ -52,3 +52,9 @@ export async function updateUserUsername(userId, newUsername) {
 
   return findUserByUserId(userId);
 }
+
+export async function deleteUser(userId) {
+  const collection = await getCollection();
+  const result = await collection.deleteOne({ _id: new ObjectId(userId) });
+  return result.deletedCount > 0;
+}

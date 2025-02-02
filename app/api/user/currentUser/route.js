@@ -2,6 +2,7 @@ import {
   findUserByUserId,
   findUserByUsername,
   updateUserUsername,
+  deleteUser,
 } from "@/models/User";
 import { NextResponse } from "next/server";
 
@@ -47,6 +48,30 @@ export async function PATCH(request) {
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch user data" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const { userId } = await request.json();
+    if (!userId) {
+      return NextResponse.json({ error: "User not found" }, { status: 400 });
+    }
+
+    const deleted = await deleteUser(userId);
+    if (!deleted) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "User deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to delete user" },
       { status: 500 }
     );
   }

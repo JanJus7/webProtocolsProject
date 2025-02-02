@@ -3,11 +3,15 @@
 import { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
   const [newUsername, setNewUsername] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,8 +42,24 @@ export default function SettingsPage() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    const userId = Cookies.get("userId");
+    if (!userId) return;
+
+    try {
+      await axios.delete("/api/user/currentUser", {
+        data: { userId },
+      });
+
+      Cookies.remove("userId");
+      router.push("/l");
+    } catch (error) {
+      setError("Failed to delete account.");
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center flex-col bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center text-blue-300">
           Change Username
@@ -75,6 +95,15 @@ export default function SettingsPage() {
             Update Username
           </button>
         </form>
+      </div>
+      <div className="bg-white mt-4 p-5 rounded-lg shadow-lg w-full max-w-md flex justify-center items-center text-red-500">
+        <button
+          className="hover:bg-gray-100 bg-gray-50 p-3 rounded-lg"
+          onClick={handleDeleteAccount}
+        >
+          Delete account
+          <FontAwesomeIcon size="xl" icon={faTrashCan} className="pl-2" />
+        </button>
       </div>
     </div>
   );
