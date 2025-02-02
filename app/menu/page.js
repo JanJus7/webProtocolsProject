@@ -89,8 +89,7 @@ export default function Menu() {
         >
           Logout...
         </button>
-        <Link href={"/game/settings"}
-        >
+        <Link href={"/game/settings"}>
           <FontAwesomeIcon
             size="xl"
             icon={faGear}

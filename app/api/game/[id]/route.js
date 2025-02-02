@@ -1,5 +1,5 @@
-import { getGame, updateGame } from '@/models/Game';
-import { NextResponse } from 'next/server';
+import { getGame, updateGame } from "@/models/Game";
+import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   const { id } = await params;
@@ -7,14 +7,14 @@ export async function GET(request, { params }) {
   if (game) {
     return NextResponse.json(game);
   } else {
-    return NextResponse.json({ message: 'Game not found' }, { status: 404 });
+    return NextResponse.json({ message: "Game not found" }, { status: 404 });
   }
 }
 
 export async function PUT(request, { params }) {
   // const { id } = params;
-  const id = request.nextUrl.pathname.split('/').pop();
+  const id = request.nextUrl.pathname.split("/").pop();
   const { board, currentPlayer, winner } = await request.json();
   await updateGame(id, { board, currentPlayer, winner });
-  return NextResponse.json({ message: 'Game updated' });
+  return NextResponse.json({ message: "Game updated" });
 }

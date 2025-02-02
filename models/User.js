@@ -1,8 +1,8 @@
-import clientPromise from '@/lib/db';
-import bcrypt from 'bcrypt';
-import { ObjectId } from 'mongodb';
+import clientPromise from "@/lib/db";
+import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
 
-const COLLECTION_NAME = 'users';
+const COLLECTION_NAME = "users";
 
 async function getCollection() {
   const client = await clientPromise;
@@ -15,7 +15,7 @@ export async function createUser(username, password) {
 
   const existingUser = await collection.findOne({ username });
   if (existingUser) {
-    throw new Error('User already exists');
+    throw new Error("User already exists");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

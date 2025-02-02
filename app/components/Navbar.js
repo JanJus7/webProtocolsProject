@@ -21,8 +21,8 @@ function Navbar() {
 
   const handleLogout = () => {
     Cookies.remove("userId");
-    router.push("/")
-  }
+    router.push("/");
+  };
 
   useEffect(() => {
     if (userId && !isGuest) {
@@ -70,12 +70,19 @@ function Navbar() {
       {showDetails && (
         <div className="flex justify-center items-center flex-col absolute top-12 right-4 bg-white p-4 shadow-lg rounded-lg">
           {isGuest ? (
-            <p className="text-gray-700">Guest session. No data is collected.</p>
+            <p className="text-gray-700">
+              Guest session. No data is collected.
+            </p>
           ) : (
             <>
               <p className="text-gray-700">Username: {username}</p>
               <p className="text-gray-700">Account created: {formattedDate}</p>
-              <button onClick={handleLogout} className="mt-2 bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600">Logout...</button>
+              <button
+                onClick={handleLogout}
+                className="mt-2 bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600"
+              >
+                Logout...
+              </button>
             </>
           )}
         </div>

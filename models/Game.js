@@ -1,7 +1,7 @@
-import clientPromise from '@/lib/db';
-import { ObjectId } from 'mongodb';
+import clientPromise from "@/lib/db";
+import { ObjectId } from "mongodb";
 
-const COLLECTION_NAME = 'games-history';
+const COLLECTION_NAME = "games-history";
 
 export async function getCollection() {
   const client = await clientPromise;
@@ -9,16 +9,17 @@ export async function getCollection() {
   return db.collection(COLLECTION_NAME);
 }
 
-
 export async function createGame(userId) {
   const collection = await getCollection();
-  const initialBoard = Array(15).fill().map(() => Array(15).fill(null));
+  const initialBoard = Array(15)
+    .fill()
+    .map(() => Array(15).fill(null));
   const game = {
     board: initialBoard,
-    currentPlayer: 'black',
+    currentPlayer: "black",
     winner: null,
     createdAt: new Date(),
-    userId
+    userId,
   };
   const result = await collection.insertOne(game);
   return result.insertedId;

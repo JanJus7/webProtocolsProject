@@ -19,16 +19,18 @@ export default function SettingsPage() {
     }
 
     try {
-      const response = await axios.patch(`/api/user/currentUser?userId=${userId}`, {
-        username: newUsername,
-      });
+      const response = await axios.patch(
+        `/api/user/currentUser?userId=${userId}`,
+        {
+          username: newUsername,
+        }
+      );
 
       if (response.status === 200) {
         setMessage("Username updated successfully!");
         setError("");
         setNewUsername("");
-        window.location.reload()
-        
+        window.location.reload();
       }
     } catch (error) {
       setError(error.response?.data?.error || "Failed to update username.");
@@ -39,10 +41,15 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center text-blue-300">Change Username</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center text-blue-300">
+          Change Username
+        </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="username"
+            >
               New Username
             </label>
             <input
