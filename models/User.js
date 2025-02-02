@@ -112,3 +112,16 @@ export async function removeFriend(userId, friendId) {
 
   return result1.modifiedCount > 0 || result2.modifiedCount > 0;
 }
+
+export async function findUsersByPattern(pattern) {
+  const collection = await getCollection();
+
+  const users = await collection
+    .find({ username: { $regex: pattern, $options: "i" } })
+    .toArray();
+
+  return users.map((user) => ({
+    _id: user._id.toString(),
+    username: user.username,
+  }));
+}
