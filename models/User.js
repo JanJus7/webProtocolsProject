@@ -38,3 +38,17 @@ export async function findUserByUserId(userId) {
   const collection = await getCollection();
   return collection.findOne({ _id: new ObjectId(userId) });
 }
+
+export async function updateUserUsername(userId, newUsername) {
+  const collection = await getCollection();
+  const result = await collection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { username: newUsername } }
+  );
+
+  if (result.modifiedCount === 0) {
+    return null;
+  }
+
+  return findUserByUserId(userId);
+}

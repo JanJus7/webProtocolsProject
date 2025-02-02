@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceSmile } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSmile, faGear } from "@fortawesome/free-solid-svg-icons";
 
 export default function Menu() {
   const router = useRouter();
@@ -83,7 +83,20 @@ export default function Menu() {
         />
         <p className="text-gray-700 mt-8">Username: {username}</p>
         <p className="text-gray-700">Account created: {formattedDate}</p>
-        <button onClick={handleLogout} className="bg-red-500 text-white rounded-lg hover:bg-red-600 mt-8 px-4 py-3">Logout...</button>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white rounded-lg hover:bg-red-600 mt-8 px-4 py-3"
+        >
+          Logout...
+        </button>
+        <Link href={"/game/settings"}
+        >
+          <FontAwesomeIcon
+            size="xl"
+            icon={faGear}
+            className="bg-yellow-300 rounded-lg hover:bg-yellow-500 mt-2 px-4 py-3 text-yellow-500 hover:text-yellow-700"
+          />
+        </Link>
       </div>
     </div>
   );
