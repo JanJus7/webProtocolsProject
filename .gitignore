@@ -90,4 +90,3 @@ next-env.d.ts
 # 🔹 TLS files
 # ==========================
 /cert/
-server.js
