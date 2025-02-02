@@ -17,6 +17,12 @@ export default function Friends() {
           `/api/user/currentUser?userId=${userId}`
         );
         setFriends(response.data.friends || []);
+
+        const initialStatus = {};
+        response.data.friends.forEach((friend) => {
+          initialStatus[friend.friendId] = friend.status;
+        });
+        setFriendStatus(initialStatus);
       } catch (error) {
         console.error("Failed to fetch friends:", error);
       }
@@ -102,6 +108,16 @@ export default function Friends() {
                   </p>
                 </div>
                 <div>
+                  <select
+                    value={friendStatus[friend.friendId]}
+                    onChange={(e) =>
+                      handleUpdateFriendStatus(friend.friendId, e.target.value)
+                    }
+                    className="px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black mr-2"
+                  >
+                    <option value="friend">Friend</option>
+                    <option value="blocked">Blocked</option>
+                  </select>
                   <button
                     onClick={() => handleRemoveFriend(friend.friendId)}
                     className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600"
