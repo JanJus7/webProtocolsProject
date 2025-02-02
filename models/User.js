@@ -22,7 +22,7 @@ export async function createUser(username, password) {
   const user = {
     username,
     password: hashedPassword,
-    games: [],
+    friends: [],
     createdAt: new Date(),
   };
   const result = await collection.insertOne(user);
@@ -57,4 +57,58 @@ export async function deleteUser(userId) {
   const collection = await getCollection();
   const result = await collection.deleteOne({ _id: new ObjectId(userId) });
   return result.deletedCount > 0;
+}
+
+export async function addFriend(userId, friendId) {
+  const collection = await getCollection();
+
+  const user = await collection.findOne({ _id: new ObjectId(userId) });
+  if (!user.friends) {
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { friends: [] } }
+    );
+  }
+
+  const isFriendAlreadyAdded = user.friends?.some(
+    (friend) => friend.friendId.toString() === friendId
+  );
+
+  if (isFriendAlreadyAdded) {
+    throw new Error("Friend already added");
+  }
+
+  const result = await collection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $addToSet: { friends: { friendId: new ObjectId(friendId), status: "pending" } } }
+  );
+
+  return result.modifiedCount > 0;
+}
+
+export async function updateFriendStatus(userId, friendId, status) {
+  const collection = await getCollection();
+
+  const result = await collection.updateOne(
+    { _id: new ObjectId(userId), "friends.friendId": new ObjectId(friendId) },
+    { $set: { "friends.$.status": status } }
+  );
+
+  return result.modifiedCount > 0;
+}
+
+export async function removeFriend(userId, friendId) {
+  const collection = await getCollection();
+
+  const result1 = await collection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $pull: { friends: { friendId: new ObjectId(friendId) } } }
+  );
+
+  const result2 = await collection.updateOne(
+    { _id: new ObjectId(friendId) },
+    { $pull: { friends: { friendId: new ObjectId(userId) } } }
+  );
+
+  return result1.modifiedCount > 0 || result2.modifiedCount > 0;
 }

@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId");
+
   try {
     const user = await findUserByUserId(userId);
     if (!user) {
@@ -16,7 +17,11 @@ export async function GET(request) {
     }
 
     return NextResponse.json(
-      { username: user.username, createdAt: user.createdAt },
+      {
+        username: user.username,
+        createdAt: user.createdAt,
+        friends: user.friends || [],
+      },
       { status: 200 }
     );
   } catch (error) {
@@ -47,7 +52,7 @@ export async function PATCH(request) {
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch user data" },
+      { error: "Failed to update username" },
       { status: 500 }
     );
   }

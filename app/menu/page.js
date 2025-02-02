@@ -79,13 +79,13 @@ export default function Menu() {
         <FontAwesomeIcon
           size="7x"
           icon={faFaceSmile}
-          className=" text-blue-500 p-2"
+          className=" text-blue-500"
         />
         <p className="text-gray-700 mt-8">Username: {username}</p>
         <p className="text-gray-700">Account created: {formattedDate}</p>
         <button
           onClick={handleLogout}
-          className="bg-red-500 text-white rounded-lg hover:bg-red-600 mt-8 px-4 py-3"
+          className="bg-red-500 text-white rounded-lg hover:bg-red-600 mt-4 px-4 py-3"
         >
           Logout...
         </button>
@@ -95,6 +95,11 @@ export default function Menu() {
             icon={faGear}
             className="bg-yellow-300 rounded-lg hover:bg-yellow-500 mt-2 px-4 py-3 text-yellow-500 hover:text-yellow-700"
           />
+        </Link>
+        <Link href="/game/friends">
+          <button className="bg-yellow-500 text-white py-2 px-3 rounded-lg hover:bg-yellow-600 mt-2">
+            Friends
+          </button>
         </Link>
       </div>
     </div>
