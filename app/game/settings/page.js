@@ -52,7 +52,7 @@ export default function SettingsPage() {
       });
 
       Cookies.remove("userId");
-      router.push("/l");
+      router.push("/");
     } catch (error) {
       setError("Failed to delete account.");
     }
