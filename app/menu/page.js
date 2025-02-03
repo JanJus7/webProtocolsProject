@@ -61,6 +61,14 @@ export default function Menu() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex justify-center items-center flex-col rounded-3x h-96 w-96 bg-gray-200 fixed left-64 rounded-3xl">
+        <Link
+          href={"/websocket"}
+          className="text-center bg-yellow-500 text-white py-2 px-3 w-40 rounded-lg hover:bg-yellow-600 mt-2"
+        >
+          Click here to chat! (Anonymously)
+        </Link>
+      </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-80 text-center">
         <h1 className="text-2xl font-bold mb-6 text-blue-300">Main Menu</h1>
         <button
