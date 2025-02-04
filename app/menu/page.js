@@ -66,7 +66,7 @@ export default function Menu() {
           href={"/game/websocket"}
           className="text-center bg-yellow-500 text-white py-2 px-3 w-40 rounded-lg hover:bg-yellow-600 mt-2"
         >
-          Click here to chat! (Anonymously)
+          Click here to chat!
         </Link>
       </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-80 text-center">
