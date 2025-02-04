@@ -7,13 +7,19 @@ export async function GET(request) {
 
   try {
     if (!query) {
-      return NextResponse.json({ error: "Query parameter is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Query parameter is required" },
+        { status: 400 }
+      );
     }
 
     const users = await findUsersByPattern(query);
     return NextResponse.json(users, { status: 200 });
   } catch (error) {
     console.error("Error in GET /api/user/search:", error);
-    return NextResponse.json({ error: "Failed to search users" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to search users" },
+      { status: 500 }
+    );
   }
 }

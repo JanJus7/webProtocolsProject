@@ -80,7 +80,11 @@ export async function addFriend(userId, friendId) {
 
   const result = await collection.updateOne(
     { _id: new ObjectId(userId) },
-    { $addToSet: { friends: { friendId: new ObjectId(friendId), status: "pending" } } }
+    {
+      $addToSet: {
+        friends: { friendId: new ObjectId(friendId), status: "pending" },
+      },
+    }
   );
 
   return result.modifiedCount > 0;

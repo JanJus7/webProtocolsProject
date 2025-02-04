@@ -1,7 +1,9 @@
-const https = require("https");
-const fs = require("fs");
-const { join } = require("path");
-const next = require("next");
+import dotenv from "dotenv";
+import https from "https";
+import fs from "fs";
+import next from "next";
+
+dotenv.config();
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
