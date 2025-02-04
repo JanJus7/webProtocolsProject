@@ -13,6 +13,9 @@ export async function GET(request) {
 
     return NextResponse.json({ userId: user._id.toString() }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch user data" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch user data" },
+      { status: 500 }
+    );
   }
 }
